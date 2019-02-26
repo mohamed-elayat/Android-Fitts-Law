@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Terminé!"
+        android:text="@string/finished"
         android:textSize="30sp" />
 
     <TextView
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/firstTextView"
-        android:text="Résultats:" />
+        android:text="@string/results" />
 
     <TextView
         android:id="@+id/thirdTextView"
@@ -29,7 +29,7 @@
         android:id="@+id/fourthTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Résultats détaillés"
+        android:text="@string/results_details"
         android:layout_below="@+id/thirdTextView"/>
 
     <Button
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="EXPORTER"
+        android:text="@string/export"
         android:textSize="14sp" />
 
     <android.support.v7.widget.RecyclerView

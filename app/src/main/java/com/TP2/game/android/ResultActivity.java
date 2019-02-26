@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
-public class ResultActivity extends AppCompatActivity {
+public class ResultActivity extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerViewAdapter adapter;
     ArrayList<Trial> TrialList;
@@ -28,29 +29,23 @@ public class ResultActivity extends AppCompatActivity {
         export = findViewById(R.id.Export);
         RecyclerView recyclerView = findViewById(R.id.Trials);
         actionBar = getSupportActionBar();
-
         actionBar.setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         TrialList = (ArrayList<Trial>) intent.getSerializableExtra("key");
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RecyclerViewAdapter(this, TrialList);
         recyclerView.setAdapter(adapter);
-
         displayResults();
+        export.setOnClickListener(this);
+    }
 
-
-        export.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent2 = new Intent(); intent2.setAction(Intent.ACTION_SEND);
-                intent2.setType("text/plain");
-                intent2.putExtra(android.content.Intent.EXTRA_SUBJECT, "Fitts' law test");
-                intent2.putExtra(Intent.EXTRA_TEXT, listToString(TrialList) );
-                startActivity(Intent.createChooser(intent2, "Share via"));
-            }
-        });
-
+    @Override
+    public void onClick(View v) {
+        Intent intent2 = new Intent(); intent2.setAction(Intent.ACTION_SEND);
+        intent2.setType("text/plain");
+        intent2.putExtra(android.content.Intent.EXTRA_SUBJECT, "Fitts' law test");
+        intent2.putExtra(Intent.EXTRA_TEXT, listToString(TrialList) );
+        startActivity(Intent.createChooser(intent2, "Share via"));
     }
 
     protected void displayResults(){
@@ -70,8 +65,7 @@ public class ResultActivity extends AppCompatActivity {
         double r2 = Math.round(  (  pow(  r, 2  )  ) * 1000000d  ) / 1000000d;
 
         TextView text = findViewById(R.id.thirdTextView);
-        text.setText(  "a = " + a + " \nb = " + b + "\nr2 = " + r2  );
-
+        text.setText(getString(R.string.linearRegression, a, b, r2));
     }
 
     protected double getTimeAvg(){
@@ -80,7 +74,6 @@ public class ResultActivity extends AppCompatActivity {
         for(  int i = 0; i < 20; i++  ){
             meanTime = meanTime + TrialList.get(i).time;
         }
-
         return meanTime / 20;
     }
 
@@ -88,7 +81,7 @@ public class ResultActivity extends AppCompatActivity {
         double meanDifficulty = 0;
 
         for(  int i = 0; i < 20; i++  ){
-            meanDifficulty = meanDifficulty + TrialList.get(i).time;
+            meanDifficulty = meanDifficulty + TrialList.get(i).difficulty;
         }
 
         return meanDifficulty / 20;
@@ -104,11 +97,11 @@ public class ResultActivity extends AppCompatActivity {
         return sqrt(  timeStd / 20  );
     }
 
-    protected double getDifficultyStd(double meanTime){
+    protected double getDifficultyStd(double meanDifficulty){
         double difficultyStd = 0;
 
         for(  int i = 0; i < 20; i++  ){
-            difficultyStd = difficultyStd + Math.pow(  TrialList.get(i).time - meanTime, 2  );
+            difficultyStd = difficultyStd + Math.pow(  TrialList.get(i).difficulty - meanDifficulty, 2  );
         }
 
         return sqrt(  difficultyStd / 20  );

@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Fitts\' Law Test</string>
-    <string name="linearRegression">a = ye5rebet: \nb = 3einek\nc = ya Mona</string>
+    <string name="start">CLIQUEZ POUR COMMENCER</string>
+    <string name="finished">Terminé</string>
+    <string name="results">Résultats</string>
+    <string name="results_details">Résultats détaillés</string>
+    <string name="linearRegression">a = %f\nb = %f\nr^2 = %f</string>
+    <string name="trial">Essai %d</string>
+    <string name="difficulty_time">Difficulté: %f, Durée: %d ms</string>
+    <string name="export">Exporter</string>
 </resources>
+
+<!-- f = float & double and d = int & long (i think)  -->
+

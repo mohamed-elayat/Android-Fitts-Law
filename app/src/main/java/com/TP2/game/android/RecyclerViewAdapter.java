@@ -1,6 +1,7 @@
 package com.TP2.game.android;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private List<Trial> data;
     private LayoutInflater inflater;
+
 
     // data is passed into the constructor
     RecyclerViewAdapter(Context context, List<Trial> data) {
@@ -31,8 +33,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         Trial ti = data.get(position);
-        holder.Trial.setText(ti.TRIAL_PREFIX + ti.trial);
-        holder.Details.setText(ti.DIFFICULTY_PREFIX + ti.difficulty + " " + ti.TIME_PREFIX + ti.time + ti.TIME_SUFFIX);
+        holder.Trial.setText(MainActivity.resources.getString(R.string.trial, ti.trial));
+        holder.Details.setText(MainActivity.resources.getString(R.string.difficulty_time, ti.difficulty, ti.time));
 
     }
 
