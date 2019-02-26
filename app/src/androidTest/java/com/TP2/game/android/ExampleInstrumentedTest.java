@@ -1,4 +1,4 @@
-package com.example.ounissa.h19ipm_dev1;
+package com.TP2.game.android;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/firstTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Terminé!"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/secondTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/firstTextView"
+        android:text="Résultats:" />
+
+    <TextView
+        android:id="@+id/thirdTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/secondTextView"
+        android:text="@string/linearRegression"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/fourthTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Résultats détaillés"
+        android:layout_below="@+id/thirdTextView"/>
+
+    <Button
+        android:id="@+id/Export"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="EXPORTER"
+        android:textSize="14sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/Trials"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/Export"
+        android:layout_below="@+id/fourthTextView"
+        />
+
+</RelativeLayout>
