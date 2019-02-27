@@ -1,5 +1,7 @@
 package com.TP2.game.android;
 
+//Mohamed Elayat, Pierre Luc Munger, Arnaud L'heureux
+
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,28 +19,44 @@ import static java.lang.Math.sqrt;
 
 public class ResultActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //This activity displays the result page
+    //of the app and offers the exporting
+    //feature. It also allows to restart the
+    //game by clicking the back button.
+
     RecyclerViewAdapter adapter;
     ArrayList<Trial> TrialList;
+    RecyclerView recyclerView;
     Button export;
     ActionBar actionBar;
+    int numberOfTrials;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        export = findViewById(R.id.Export);
-        RecyclerView recyclerView = findViewById(R.id.Trials);
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        Intent intent = getIntent();
-        TrialList = (ArrayList<Trial>) intent.getSerializableExtra("key");
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerViewAdapter(this, TrialList);
-        recyclerView.setAdapter(adapter);
-        displayResults();
-        export.setOnClickListener(this);
+        initializeVariables();
     }
 
+    protected void initializeVariables(){
+        numberOfTrials = getResources().getInteger(R.integer.numberOfTrials);
+        export = findViewById(R.id.Export);
+        recyclerView = findViewById(R.id.Trials);
+        actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);      //displays the back button
+        export.setOnClickListener(this);
+
+        TrialList = (ArrayList<Trial>) getIntent().getSerializableExtra("key");     //obtains the ArrayList passed by the intent
+        adapter = new RecyclerViewAdapter(this, TrialList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        displayResults();       //displays the linear regression results.
+    }
+
+
+    //Exports the list information using a string
     @Override
     public void onClick(View v) {
         Intent intent2 = new Intent(); intent2.setAction(Intent.ACTION_SEND);
@@ -48,99 +66,111 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         startActivity(Intent.createChooser(intent2, "Share via"));
     }
 
+    //calculates the linear regression variables and displays them
     protected void displayResults(){
-
         double meanDifficulty = getDifficultyAvg();
         double meanTime = getTimeAvg();
-        double difficultyStd = getDifficultyStd(  meanDifficulty  );
-        double timeStd = getTimeStd(  meanTime  );
+        double difficultyStd = getDifficultyStd(meanDifficulty);
+        double timeStd = getTimeStd(meanTime);
         double r = getR();
 
-//        double b = r * timeStd / difficultyStd;
-//        double  a = meanTime - b * meanDifficulty;
-//        double r2 = pow(  r, 2  );
-
-        double b = Math.round(  (  r * timeStd / difficultyStd  ) * 1000000d  ) / 1000000d;
-        double  a = Math.round(  (  meanTime - b * meanDifficulty  ) * 1000000d  ) / 1000000d;
-        double r2 = Math.round(  (  pow(  r, 2  )  ) * 1000000d  ) / 1000000d;
+        double b = Math.round((r * timeStd / difficultyStd) * 1000000d) / 1000000d;
+        double a = Math.round((meanTime - b * meanDifficulty) * 1000000d) / 1000000d;
+        double r2 = Math.round((pow(r, 2)) * 1000000d) / 1000000d;
 
         TextView text = findViewById(R.id.thirdTextView);
         text.setText(getString(R.string.linearRegression, a, b, r2));
     }
 
+    //returns the avg trial time
     protected double getTimeAvg(){
         double meanTime = 0;
-
-        for(  int i = 0; i < 20; i++  ){
-            meanTime = meanTime + TrialList.get(i).time;
+        for(int i = 0; i < numberOfTrials; i++){
+            meanTime += TrialList.get(i).time;
         }
-        return meanTime / 20;
+        return meanTime / numberOfTrials;
     }
 
+    //returns the avg difficulty across all trials
     protected double getDifficultyAvg(){
         double meanDifficulty = 0;
-
-        for(  int i = 0; i < 20; i++  ){
-            meanDifficulty = meanDifficulty + TrialList.get(i).difficulty;
+        for(int i = 0; i < numberOfTrials; i++){
+            meanDifficulty += TrialList.get(i).difficulty;
         }
-
-        return meanDifficulty / 20;
+        return meanDifficulty / numberOfTrials;
     }
 
+    //returns the avg trial time squared
+    protected double getTime2Avg(){
+        double mean2Time = 0;
+        for(int i = 0; i < numberOfTrials; i++){
+            mean2Time += pow(TrialList.get(i).time, 2);
+        }
+        return mean2Time / numberOfTrials;
+    }
+
+    //returns the avg difficulty squared
+    protected double getDifficulty2Avg(){
+        double mean2Difficulty = 0;
+        for(int i = 0; i < numberOfTrials; i++){
+            mean2Difficulty += pow(TrialList.get(i).difficulty, 2);
+        }
+        return mean2Difficulty / numberOfTrials;
+    }
+
+    //returns the avg time * difficulty value
+    protected double getTimeXDifficultyAvg(){
+        double meanTimeXDifficulty = 0;
+        for(int i = 0; i < numberOfTrials; i++){
+            meanTimeXDifficulty += (TrialList.get(i).difficulty) * (TrialList.get(i).time);
+        }
+        return meanTimeXDifficulty / numberOfTrials;
+    }
+
+    //returns the time standard deviation
     protected double getTimeStd(double meanTime){
         double timeStd = 0;
-
-        for(  int i = 0; i < 20; i++  ){
-            timeStd = timeStd + Math.pow(  TrialList.get(i).time - meanTime, 2  );
+        for(int i = 0; i < numberOfTrials; i++){
+            timeStd += Math.pow(TrialList.get(i).time - meanTime, 2);
         }
-
-        return sqrt(  timeStd / 20  );
+        return sqrt(timeStd / numberOfTrials);
     }
 
+    //returns the difficulty standard deviation
     protected double getDifficultyStd(double meanDifficulty){
         double difficultyStd = 0;
-
-        for(  int i = 0; i < 20; i++  ){
-            difficultyStd = difficultyStd + Math.pow(  TrialList.get(i).difficulty - meanDifficulty, 2  );
+        for(int i = 0; i < numberOfTrials; i++){
+            difficultyStd += Math.pow(TrialList.get(i).difficulty - meanDifficulty, 2);
         }
-
-        return sqrt(  difficultyStd / 20  );
+        return sqrt(difficultyStd / numberOfTrials);
     }
 
+    //returns the sample correlation coefficient
     protected double getR(){
+        double num = getTimeXDifficultyAvg() - getDifficultyAvg() * getTimeAvg();
+        double denum1 = getTime2Avg() - pow(getTimeAvg(), 2);
+        double denum2 = getDifficulty2Avg() - pow(getDifficultyAvg(), 2);
 
-        double num = 0;
-        double denum1 = 0;
-        double denum2 = 0;
-
-        for(  int i = 0; i < 20; i++  ){
-
-            num = num + TrialList.get(i).time * TrialList.get(i).difficulty;
-            denum1 = denum1 + pow(  TrialList.get(i).time, 2  );
-            denum2 = denum2 + pow(  TrialList.get(i).difficulty, 2  );
-        }
-
-        return num / sqrt(  denum1 * denum2  );
-
+        return num / sqrt(denum1 * denum2);
     }
 
-
-    public String listToString(  ArrayList<Trial> arr  ){
+    //method that stores the list information in a string
+    //to be exported
+    public String listToString(ArrayList<Trial> arr){
         StringBuilder builder = new StringBuilder();
-        for (  int i = 0; i < 20; i++  ) {
-            builder.append( "Trial = " + arr.get(i).trial + " " +
-                            "Difficulty = " + arr.get(i).difficulty + " " +
-                            "Time = " + arr.get(i).time + "\n"  );
+        for (int i = 0; i < numberOfTrials; i++) {
+            builder.append(  getString(R.string.export_string,
+                    arr.get(i).trial,
+                    arr.get(i).difficulty,
+                    arr.get(i).time)  );
         }
         return builder.toString();
     }
 
+    //method that is called when the back button is pressed
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -150,6 +180,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    //method that restarts the game when called
     @Override
     public void onBackPressed() {
         Intent intent3 = new Intent(this, MainActivity.class);

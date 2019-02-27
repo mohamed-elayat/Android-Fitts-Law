@@ -7,6 +7,7 @@
     <string name="linearRegression">a = %f\nb = %f\nr^2 = %f</string>
     <string name="trial">Essai %d</string>
     <string name="difficulty_time">Difficulté: %f, Durée: %d ms</string>
+    <string name="export_string">Trial = %d Difficulty = %f Time = %d ms \n</string>
     <string name="export">Exporter</string>
 </resources>
 
