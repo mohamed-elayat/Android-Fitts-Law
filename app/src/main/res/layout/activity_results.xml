@@ -8,14 +8,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/finished"
-        android:textSize="30sp" />
+        android:textSize="30sp"/>
 
     <TextView
         android:id="@+id/secondTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/firstTextView"
-        android:text="@string/results" />
+        android:text="@string/results"/>
 
     <TextView
         android:id="@+id/thirdTextView"
@@ -32,20 +32,35 @@
         android:text="@string/results_details"
         android:layout_below="@+id/thirdTextView"/>
 
-    <Button
-        android:id="@+id/Export"
+    <LinearLayout
+        android:id="@+id/Buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/export"
-        android:textSize="14sp" />
+        android:layout_centerHorizontal="true">
+        <Button
+            android:id="@+id/Export"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/export"
+            android:onClick="onClickExport"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/Visualize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/visualize"
+            android:onClick="onClickVisualize"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/Trials"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/Export"
+        android:layout_above="@+id/Buttons"
         android:layout_below="@+id/fourthTextView"
         />
 

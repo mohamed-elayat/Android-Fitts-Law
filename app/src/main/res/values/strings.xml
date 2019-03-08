@@ -9,7 +9,13 @@
     <string name="difficulty_time">Difficulté: %f, Durée: %d ms</string>
     <string name="export_string">Trial = %d Difficulty = %f Time = %d ms \n</string>
     <string name="export">Exporter</string>
+    <string name="visualize">Visualiser</string>
+    <string name="title_activity_plot">PlotActivity</string>
+    <string name="plot">Représentation graphique</string>
+    <string name="end_text">Retour</string>
+    <string name="label_x_axis">ID</string>
+    <string name="label_y_axis">Tm (ms)</string>
 </resources>
 
-<!-- f = float & double and d = int & long (i think)  -->
+    <!-- f = float & double and d = int & long (i think)  -->
 

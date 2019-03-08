@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
 
-    //adds a trial to the arrayList
+    //adds a trial to the arrayLis
     protected void intoArray(int count, int time, double d){
         Trials.add(new Trial(count, time, d));
     }

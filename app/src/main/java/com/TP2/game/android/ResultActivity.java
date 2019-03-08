@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
-public class ResultActivity extends AppCompatActivity implements View.OnClickListener {
+public class ResultActivity extends AppCompatActivity{
 
     //This activity displays the result page
     //of the app and offers the exporting
@@ -28,8 +28,12 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     ArrayList<Trial> TrialList;
     RecyclerView recyclerView;
     Button export;
+    Button visualize;
     ActionBar actionBar;
+    Bundle bundle;
     int numberOfTrials;
+    double a;
+    double b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +45,11 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     protected void initializeVariables(){
         numberOfTrials = getResources().getInteger(R.integer.numberOfTrials);
         export = findViewById(R.id.Export);
+        visualize = findViewById(R.id.Visualize);
         recyclerView = findViewById(R.id.Trials);
         actionBar = getSupportActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);      //displays the back button
-        export.setOnClickListener(this);
 
         TrialList = (ArrayList<Trial>) getIntent().getSerializableExtra("key");     //obtains the ArrayList passed by the intent
         adapter = new RecyclerViewAdapter(this, TrialList);
@@ -57,13 +61,31 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
 
     //Exports the list information using a string
-    @Override
-    public void onClick(View v) {
+    public void onClickExport(View v) {
         Intent intent2 = new Intent(); intent2.setAction(Intent.ACTION_SEND);
         intent2.setType("text/plain");
         intent2.putExtra(android.content.Intent.EXTRA_SUBJECT, "Fitts' law test");
         intent2.putExtra(Intent.EXTRA_TEXT, listToString(TrialList) );
         startActivity(Intent.createChooser(intent2, "Share via"));
+    }
+
+    //Displays a visual representation of the results
+    public void onClickVisualize(View v) {
+        Intent myIntent = new Intent(this, PlotActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_NEW_TASK);
+        myIntent.putExtra("key", TrialList);
+
+        Bundle bundle = new Bundle();
+
+        bundle.putDouble("key_a",a);
+        bundle.putDouble("key_b",b);
+
+        myIntent.putExtras(bundle);
+
+        startActivity(myIntent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     //calculates the linear regression variables and displays them
@@ -74,8 +96,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         double timeStd = getTimeStd(meanTime);
         double r = getR();
 
-        double b = Math.round((r * timeStd / difficultyStd) * 1000000d) / 1000000d;
-        double a = Math.round((meanTime - b * meanDifficulty) * 1000000d) / 1000000d;
+        b = Math.round((r * timeStd / difficultyStd) * 1000000d) / 1000000d;
+        a = Math.round((meanTime - b * meanDifficulty) * 1000000d) / 1000000d;
         double r2 = Math.round((pow(r, 2)) * 1000000d) / 1000000d;
 
         TextView text = findViewById(R.id.thirdTextView);
