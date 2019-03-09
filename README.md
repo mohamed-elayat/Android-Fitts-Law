@@ -1,4 +1,4 @@
-# Fitts' Law Test Android Game
+# Fitts' Law Android Game
 
 Game that tests how closely the user's reaction time follows Fitts' Law.
 
@@ -21,7 +21,7 @@ Android Studio needs to be installed to run the app. To run the app from Android
 1. Download a ZIP of the GitHub project.
 2. Unzip the GitHub project to a folder.
 2. Open Android Studio.
-3. Go to File -> New -> Import Project. Then choose the unzipped folder and click Next -> Finish.
+3. Go to File -> New -> Import Project. Open the unzipped folder, choose the folder inside and click Next -> Finish.
 4. Go to Build -> Rebuild project.
 6. Go to Run -> Run (or press Shift + F10).
 7. Either connect an Android phone to run it on, or download an emulator. (Might take a few minutes to build).
